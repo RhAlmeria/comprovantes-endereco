@@ -331,7 +331,7 @@ async function enviar(){
   S.busy=true;renderDrawer();
   try{
     const body={unidade:S.uniId,codigo:S.codigo,id:p.id,dataComprovante:S.dt,obs:(S.ob||'').trim().slice(0,300),mime:S.pend.mime,data:S.pend.data,
-      enviadoPor:'Gerente '+((S.unidade&&S.unidade.gerente)||''),alugada:S.alugada,contrato:S.alugada?{mime:S.pendC.mime,data:S.pendC.data}:null};
+      enviadoPor:(S.unidade&&S.unidade.gerente)?'Gerente '+S.unidade.gerente:'Gestão da unidade',alugada:S.alugada,contrato:S.alugada?{mime:S.pendC.mime,data:S.pendC.data}:null};
     const r=await apiPost(body);
     if(!r.ok){ if(r.codigo){toast('Sessão expirada. Entre de novo com o código.',true);S.busy=false;sair();return} throw new Error(r.erro||'Erro ao enviar') }
     if(S.saveCopy){ saveBlob(S.pend.blob,'comprovante_endereco_'+slug(p.nome)+'.'+extDe(S.pend.mime)); if(S.alugada&&S.pendC) setTimeout(()=>saveBlob(S.pendC.blob,'contrato_aluguel_'+slug(p.nome)+'.'+extDe(S.pendC.mime)),600) }
